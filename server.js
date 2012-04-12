@@ -30,15 +30,6 @@ function Subscriber(peer) {
   }
 }
 
-setInterval(function() {
-  subscribers.forEach(function(subscriber) {
-    subscriber.push(quotes[index++]);
-    if(index > quotes.length) {
-      index = 0;
-    }
-  });
-}, 10);
-
 function httpHandler(peer) {
   peer.onRequest = function(request) {
     request.url = parseURL(request.url, true);
@@ -62,6 +53,8 @@ function httpHandler(peer) {
               peer.onWSMessage = function(message) {
                 console.log("ws.peer.message");
                 console.log(message);
+                var obj = JSON.parse(message.payload.toString());
+                console.log(obj);
               };
               return true;
               break;
@@ -89,17 +82,16 @@ function httpHandler(peer) {
   };
 }
 
-var rc;
 var httpd = new HTTPServer({
   host: "0.0.0.0",
-  port: 8080,
+  port: 8000,
   onConnection: httpHandler
 });
 
 // httpd error handler
 httpd.onError = function(err) {
   console.error(err);
-  logger.trace("httpd.onError");
+  console.trace("httpd.onError");
 };
 
 // httpd statistics handler
@@ -107,9 +99,17 @@ httpd.onStats(function(st) {
   console.info(st);
 }, 1000);
 
-rc = httpd.listen(128);
+var rc = httpd.listen(128);
 if(rc !== 0) {
   process.exit(1);
 }
 
+setInterval(function() {
+  subscribers.forEach(function(subscriber) {
+    subscriber.push(quotes[index++]);
+    if(index > quotes.length) {
+      index = 0;
+    }
+  });
+}, 10);
 

@@ -48,9 +48,9 @@ div#first {
 var qchart;
 function loadPage() {
   qchart = new ChartX("cx_session", {
-    width: 640,
-    height: 480,
-    bufferfactor: 3,
+    width: 1000,
+    height: 300,
+    bufferfactor: 6,
     title: "quotes",
     legend: true,
     container: "charts",
@@ -61,15 +61,15 @@ function loadPage() {
         name: "wti",
         color: "#cc3300",
         type: "line",
-        yscale: 120,
-        cross: -60
+        yscale: 300,
+        cross: -11350
       },
       {
         name: "brent",
         color: "#33cc33",
         type: "line",
-        yscale: 120,
-        cross: -60
+        yscale: 300,
+        cross: -8750
       }
     ]
   });
@@ -83,9 +83,10 @@ function initSocket() {
     quoteSocket.onmessage = function(event){
       var quote = JSON.parse(event.data);
       qchart.draw({
-        wti: quote[2],
-        brent: quote[3]
+        wti: quote[2] * 100,
+        brent: quote[3] * 100
       });
+      quoteSocket.send(event.data);
     };
   };
   quoteSocket.onerror = function(err) {
