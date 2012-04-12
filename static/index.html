@@ -78,7 +78,7 @@ function loadPage() {
 function initSocket() {
   var container = document.getElementById("container");
   var quoteSocket;
-  quoteSocket = new WebSocket("ws://shuttle.owner.net/quotes");
+  quoteSocket = new WebSocket("ws://" + window.location.hostname + "/quotes");
   quoteSocket.onopen = function(event){
     quoteSocket.onmessage = function(event){
       var quote = JSON.parse(event.data);
