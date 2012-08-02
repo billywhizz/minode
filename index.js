@@ -5,5 +5,5 @@ exports.mime = require("./lib/mime");
 exports.socket = require("./lib/minsock");
 exports.filecache = require("./lib/filecache");
 exports.memcached = require("./lib/memcached");
-//exports.forkit = require("./lib/forkit");
+exports.forkit = require("./lib/forkit");
 //exports.ftp = require("./lib/ftp.js");
