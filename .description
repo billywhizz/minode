@@ -1,0 +1,1 @@
+minimal socket and utility libraries for node.js with no dependencies on node.js javascript, only the c++ bindings.
