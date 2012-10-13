@@ -7,3 +7,4 @@ exports.websock = require("./lib/websock");
 exports.memcached = require("./lib/memcached");
 exports.ftp = require("./lib/ftp.js");
 exports.forkit = require("./lib/forkit");
+exports.monitor = require("./lib/monitor");
