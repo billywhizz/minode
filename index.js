@@ -8,3 +8,9 @@ exports.memcached = require("./lib/memcached");
 exports.ftp = require("./lib/ftp.js");
 exports.forkit = require("./lib/forkit");
 exports.monitor = require("./lib/monitor");
+try {
+  exports.oracle = require("./lib/oracle");
+}
+catch(e) {
+  //console.error("oracle not supported");
+}

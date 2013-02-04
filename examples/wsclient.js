@@ -5,9 +5,15 @@ var c = new Client();
 var handshake = new Buffer("GET / HTTP/1.1\r\nHost: shuttle.owner.net\r\nConnection: Upgrade\r\nUpgrade: WebSocket\r\nSec-WebSocket-Key: CaH1mGi/Q69BP2o0LXvEoQ==\r\nSec-WebSocket-Version: 13\r\nSec-WebSocket-Protocol: echo-protocol\r\n\r\n");  
 var payload = createMessage(new Buffer("hello"));
 
+var b = new Buffer(4096);
+var stats = {
+  msgin: 0,
+  msgout: 0,
+  txin: 0,
+  txout: 0
+};
 c.onConnection = function(peer) {
   peer.onResponse = function(info) {
-    createClient(peer, info);
     peer.onWSError = function(err) {
       console.log("websocket.error:");
       console.error(err);
@@ -16,12 +22,35 @@ c.onConnection = function(peer) {
       console.log("websocket.close");
     };
     peer.onWSStart = function() {
-      console.log("websocket.start");
+      var r;
+      peer.parser.decode = false;
+      peer.parser.unmask = false;
       peer.onWSMessage = function(msg) {
-        console.log("websocket.message:");
-        console.log(msg);
+        var r;
+        stats.msgin++;
+        stats.txin += msg.length;
+        r = peer.sendMessage(msg.payload, null, function(status, handle, req) {
+          if(status !== 0) {
+            console.error("write error!!!");
+            return;
+          }
+          stats.msgout++;
+          stats.txout += msg.payload.length;
+        });
+        if(!r) console.error("write error!!!!");
       };
+      r = peer.sendMessage(b, null, function(status, handle, req) {
+        if(status !== 0) {
+          console.error("write error!!!");
+          return
+        }
+        stats.msgout++;
+        stats.txout += b.length;
+      });
+      if(!r) console.error("write error!!!!");
+      return true;
     };
+    createClient(peer, info);
   };
   peer.onError = function(err) {
     console.log("socket.error:");
@@ -38,5 +67,10 @@ c.onConnection = function(peer) {
       }
     }
   });
+  peer.readStart();
 }
-c.connect("10.11.12.8", 8080);
+c.connect("10.11.12.145", 8000);
+setInterval(function() {
+  console.log(stats);
+  stats.msgin = stats.msgout = stats.txin = stats.txout = 0;
+}, 1000);

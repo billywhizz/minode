@@ -1,14 +1,16 @@
 var minsock = require("../lib/minsock");
 var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
+var pprint = function() {};
 var config = {
   host: "0.0.0.0",
-  port: 9012,
-  remotehost: "127.0.0.1",
-  remoteport: 9011,
-  secure: false,
+  port: 9000,
+  remotehost: "10.11.12.1",
+  remoteport: 80,
+  secure: true,
   cert: "./cert.pem",
-  key: "./key.pem"
+  key: "./key.pem",
+  ca: "./owner.net.pem"
 };
 sock.bind(config.host, config.port);
 sock.onconnection = function(peer) {
@@ -61,6 +63,8 @@ sock.onconnection = function(peer) {
   peer.setNoDelay(true);
   if(config.secure) {
     peer.onSecure = function(err) {
+      //console.log(peer.context);
+      //console.log(peer.ssl.verifyError());
       startConnection();
     };
   }
@@ -105,6 +109,8 @@ sock.onconnection = function(peer) {
   if(config.secure) {
     peer.cert = require("fs").readFileSync(config.cert).toString();
     peer.key = require("fs").readFileSync(config.key).toString();
+    if(config.ca) peer.ca = require("fs").readFileSync(config.ca).toString();
+    if(config.ciphers) peer.ciphers = config.ciphers;
     peer.setSecure();
   }
   peer.readStart();

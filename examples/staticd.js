@@ -5,10 +5,10 @@ var FileCache = require("../").filecache.FileCache;
 var config = {
   httpd: {
     host: "0.0.0.0",
-    port: 8000
+    port: 9000
   },
   filecache: {
-    home: "/media/storage",
+    home: process.argv[2],
     chunksize: 4096
   }
 };
