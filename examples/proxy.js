@@ -4,8 +4,8 @@ var sock = new minsock.TCP();
 var pprint = function() {};
 var config = {
   host: "0.0.0.0",
-  port: 9000,
-  remotehost: "10.11.12.1",
+  port: 443,
+  remotehost: "184.72.63.37",
   remoteport: 80,
   secure: true,
   cert: "./cert.pem",
