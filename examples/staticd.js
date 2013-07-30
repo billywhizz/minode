@@ -9,6 +9,7 @@ var config = {
   },
   filecache: {
     home: process.argv[2],
+    maxfilesize: 20 * 1024 * 1024,
     chunksize: 4096
   }
 };
@@ -17,52 +18,12 @@ var rc;
 var httpd;
 function httpHandler(peer) {
   peer.onRequest = function(request) {
-    var path;
     request.url = parseURL(request.url, true);
-    var pn = request.url.pathname;
-    path = pn.split("/");
-    path.shift();
-    request.service = path.shift();
-    if(request.upgrade) {
-      if(request.service === "storm") {
-        createServer(peer, request);
-        peer.onWSClose = function() {
-          console.trace("ws.peer.close");
-        };
-        peer.onWSError = function(err) {
-          console.trace("ws.peer.error");
-          console.error(err);
-        };
-        peer.onWSStart = function() {
-          peer.onWSMessage = function(message) {
-
-          };
-          return true;
-        };
-        return true;
+    fc.sendFile(peer, request, function(err, file) {
+      if(err) {
+        peer.onError(err);
       }
-      return false;
-    }
-    if(pn[pn.length-1] === "/") {
-      fc.generateIndex(request, function(err, html) {
-        if(err) {
-          console.error(err);
-          return;
-        }
-        fc.sendFile(peer, request, function(err, file) {
-          if(err) {
-            peer.onError(err);
-          }
-        });
-      });
-    }
-    else {
-      fc.sendFile(peer, request, function(err, file) {
-        if(err) {
-          peer.onError(err);
-        }
-      });
-    }
+    });
     return true;
   };
   peer.onClose = function() {
@@ -74,7 +35,7 @@ function httpHandler(peer) {
   };
 }
 httpd = new HTTPServer(config.httpd);
-config.httpd.onConnection = httpHandler;
+httpd.onConnection = httpHandler;
 httpd.onError = function(err) {
   console.error(err);
   console.trace("httpd.onError");
