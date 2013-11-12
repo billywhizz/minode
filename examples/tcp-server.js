@@ -3,10 +3,10 @@ var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
-  port: 9012,
-  secure: false,
-  cert: "./cert.pem",
-  key: "./key.pem"
+  port: 9000,
+  secure: true,
+  cert: "../../../cert.pem",
+  key: "../../../key.pem"
 };
 sock.bind(config.host, config.port);
 sock.onconnection = function(peer) {
@@ -39,8 +39,6 @@ sock.onconnection = function(peer) {
     };
     peer.setSecure();
   }
-  else {
     startConnection();
-  }
 }
 sock.listen(128);

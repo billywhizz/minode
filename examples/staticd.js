@@ -5,7 +5,10 @@ var FileCache = require("../").filecache.FileCache;
 var config = {
   httpd: {
     host: "0.0.0.0",
-    port: 9000
+    port: 9000,
+    secure: true,
+    cert: "../../../cert.pem",
+    key: "../../../key.pem"
   },
   filecache: {
     home: process.argv[2],
@@ -33,6 +36,14 @@ function httpHandler(peer) {
     console.error(err);
     console.trace("peer.onError");
   };
+  if(config.httpd.secure) {
+    peer.cert = require("fs").readFileSync(config.httpd.cert).toString();
+    peer.key = require("fs").readFileSync(config.httpd.key).toString();
+    peer.onSecure = function(err) {
+      peer.readStart();
+    };
+    peer.setSecure();
+  }
 }
 httpd = new HTTPServer(config.httpd);
 httpd.onConnection = httpHandler;

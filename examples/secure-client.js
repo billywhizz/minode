@@ -2,7 +2,7 @@ var minsock = require("../lib/minsock");
 function connect(host, port) {
   var client = new minsock.TCP();
   var b = new Buffer(10);
-  b.writeAscii("0123456789");
+  b.asciiWrite("0123456789");
   var r = client.connect(host, port);
   if(!r) {
     var err = new Error("client.connect");
@@ -53,7 +53,7 @@ function connect(host, port) {
   }
   return client;
 }
-var c = connect(host, port);
+var c = connect(process.argv[2], process.argv[3]);
 if(!c) {
   process.exit(1);
 }
