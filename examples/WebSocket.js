@@ -89,13 +89,13 @@ WebSocket = function(url, protocol) {
       peer.onSecure = function(err) {
         if(err) {
           _websocket.onerror(err);
-          peer.kill();
-          return;
+          //peer.kill();
+          //return;
         }
         if(!peer.verified) {
           _websocket.onerror("verified: " + peer.verified);
-          peer.kill();
-          return;
+          //peer.kill();
+          //return;
         }
         peer.send(handshake, function(status, handle, req) {
           if(status !== 0) {
