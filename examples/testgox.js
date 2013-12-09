@@ -1,5 +1,5 @@
 require("./WebSocket");
-var GoxClient = require("./gox").GoxClient;
+var GoxClient = require("./mtgox").GoxClient;
 var channels = {
   depth: "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe",
   ticker: "d5f06780-30a8-4a48-a2f8-7ed181b4a13f",
