@@ -1,8 +1,16 @@
 var minsock = require("../lib/minsock");
 function connect(host, port) {
   var client = new minsock.TCP();
-  var b = new Buffer(10);
-  b.asciiWrite("0123456789");
+  var headers = [
+    "GET /mtgox?Currency=USD HTTP/1.1",
+    "Host: websocket.mtgox.com",
+    "Origin: http://websocket.mtgox.com",
+    "Connection: Upgrade",
+    "Upgrade: WebSocket",
+    "Sec-WebSocket-Key: CaH1mGi/Q69BP2o0LXvEoQ==",
+    "Sec-WebSocket-Version: 13"
+  ];
+  var b = new Buffer(headers.join("\r\n") + "\r\n\r\n");
   var r = client.connect(host, port);
   if(!r) {
     var err = new Error("client.connect");
@@ -36,11 +44,14 @@ function connect(host, port) {
         return;
       }
       console.log("peer.read:");
-      console.log(buffer.toString("ascii", start, start + len));
+      console.log(buffer.asciiSlice(start, start + len));
     };
     peer.onSecure = function(err) {
       console.log("peer.secure:");
       if(err) console.log(err);
+      if(!peer.verified) {
+        console.error("not verified!!!");
+      }
       peer.send(b, function(status, handle, req) {
         console.log("peer.send:" + status);
       });

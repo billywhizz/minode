@@ -1,12 +1,11 @@
 var minsock = require("../lib/minsock");
 var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
-var pprint = function() {};
 var config = {
   host: "0.0.0.0",
   port: 443,
-  remotehost: "184.72.63.37",
-  remoteport: 80,
+  remotehost: "54.215.14.60",
+  remoteport: 443,
   secure: true,
   cert: "./cert.pem",
   key: "./key.pem",
@@ -63,6 +62,9 @@ sock.onconnection = function(peer) {
   peer.setNoDelay(true);
   if(config.secure) {
     peer.onSecure = function(err) {
+      //TODO: error handling - callback to user and allow them to check?
+      // default should be non-permissive
+      if(err) console.error(err);
       //console.log(peer.context);
       //console.log(peer.ssl.verifyError());
       startConnection();
