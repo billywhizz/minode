@@ -4,8 +4,8 @@ var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
   port: 443,
-  remotehost: "54.215.14.60",
-  remoteport: 443,
+  remotehost: "46.231.112.170",
+  remoteport: 80,
   secure: true,
   cert: "./cert.pem",
   key: "./key.pem",
