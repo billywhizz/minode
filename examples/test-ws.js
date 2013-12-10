@@ -1,4 +1,4 @@
-require("../").websock;
+require("../");
 var sock = new WebSocket("wss://websocket.mtgox.com/mtgox?Currency=USD");
 function heading(m) {
   console.log("\x1B[32m" + m + "\x1B[39m");

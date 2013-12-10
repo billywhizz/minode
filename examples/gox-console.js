@@ -1,4 +1,4 @@
-require("../").websock;
+require("../");
 var GoxClient = require("./mtgox").GoxClient;
 var channels = {
   depth: "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe",
