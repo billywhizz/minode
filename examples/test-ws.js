@@ -1,29 +1,26 @@
-require("./WebSocket");
+require("../").websock;
 var sock = new WebSocket("wss://websocket.mtgox.com/mtgox?Currency=USD");
-var messages = 0;
+function heading(m) {
+  console.log("\x1B[32m" + m + "\x1B[39m");
+}
 sock.onopen = function() {
-  console.log("onopen");
+  heading("onopen");
   sock.send(JSON.stringify({
     op: "unsubscribe",
     channel: "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe"
   }));
-  setInterval(function() {
-    console.log(messages);
-  }, 1000);
 };
 sock.onclose = function() {
-  console.log("onclose");
+  heading("onclose");
 };
 sock.onerror = function(err) {
-  console.log("onerror");
+  heading("onerror:");
   console.error(err);
 };
 sock.onmessage = function(event) {
-  var m;
+  heading("onmessage:");
   try {
-    m = JSON.parse(event.data);
-    messages++;
-    console.log(m);
+    console.log(JSON.stringify(JSON.parse(event.data), null, "  ").replace(/\"/g, ""));
   }
   catch(err) {
     console.error(err);
