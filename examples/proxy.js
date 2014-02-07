@@ -3,10 +3,10 @@ var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
-  port: 443,
-  remotehost: "46.231.112.170",
+  port: 80,
+  remotehost: "212.58.244.70",
   remoteport: 80,
-  secure: true,
+  secure: false,
   cert: "./cert.pem",
   key: "./key.pem",
   ca: "./owner.net.pem"
@@ -35,14 +35,14 @@ sock.onconnection = function(peer) {
           backend.kill();
           return;
         }
-        console.log("backend.onread: " + len);
-        pprint(buf, start, len, process.stdout);
+        //console.log("backend.onread: " + len);
+        //pprint(buf, start, len, process.stdout);
         peer.send(buf.slice(start, start + len), function(status, handle, req) {
           if(status !== 0) {
             peer.kill();
             return;
           }
-          console.log("peer.send: " + len + ":" + status);
+          //console.log("peer.send: " + len + ":" + status);
         });
       };
       backend.readStart();
@@ -78,8 +78,8 @@ sock.onconnection = function(peer) {
       peer.kill();
       return;
     }
-    console.log("peer.onread: " + len);
-    pprint(buf, start, len, process.stdout);
+    //console.log("peer.onread: " + len);
+    //pprint(buf, start, len, process.stdout);
     var b = new Buffer(len);
     buf.copy(b, 0, start, start + len);
     if(peer.backend && !peer.backend.closed) {
@@ -88,7 +88,7 @@ sock.onconnection = function(peer) {
           peer.backend.kill();
           return;
         }
-        console.log("backend.send: " + len + ":" + status);
+        //console.log("backend.send: " + len + ":" + status);
       });
     }
     else {

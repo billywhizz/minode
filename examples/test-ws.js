@@ -1,13 +1,12 @@
 require("../");
-var sock = new WebSocket("wss://websocket.mtgox.com/mtgox?Currency=USD");
+var sock = new WebSocket("ws://ws.blockchain.info/inv");
 function heading(m) {
   console.log("\x1B[32m" + m + "\x1B[39m");
 }
 sock.onopen = function() {
   heading("onopen");
   sock.send(JSON.stringify({
-    op: "unsubscribe",
-    channel: "24e67e0d-1cad-4cc0-9e7a-f8523ef460fe"
+    op: "unconfirmed_sub"
   }));
 };
 sock.onclose = function() {
