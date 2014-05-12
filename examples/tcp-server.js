@@ -4,7 +4,7 @@ var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
   port: 9000,
-  secure: true,
+  secure: false,
   cert: "../../../cert.pem",
   key: "../../../key.pem"
 };
@@ -39,6 +39,6 @@ sock.onconnection = function(peer) {
     };
     peer.setSecure();
   }
-    startConnection();
+  startConnection();
 }
 sock.listen(128);

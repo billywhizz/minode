@@ -3,9 +3,9 @@ var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
-  port: 80,
-  remotehost: "212.58.244.70",
-  remoteport: 80,
+  port: 22,
+  remotehost: "10.11.12.145",
+  remoteport: 22,
   secure: false,
   cert: "./cert.pem",
   key: "./key.pem",
