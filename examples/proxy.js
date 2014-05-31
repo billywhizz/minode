@@ -1,11 +1,12 @@
 var minsock = require("../lib/minsock");
 var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
+var proxyPort = parseInt(process.argv[2] || "27017");
 var config = {
   host: "0.0.0.0",
-  port: 22,
+  port: proxyPort,
   remotehost: "10.11.12.145",
-  remoteport: 22,
+  remoteport: proxyPort,
   secure: false,
   cert: "./cert.pem",
   key: "./key.pem",
@@ -35,8 +36,9 @@ sock.onconnection = function(peer) {
           backend.kill();
           return;
         }
-        //console.log("backend.onread: " + len);
+        console.log("backend.onread: " + len);
         //pprint(buf, start, len, process.stdout);
+        if(peer.closed) return;
         peer.send(buf.slice(start, start + len), function(status, handle, req) {
           if(status !== 0) {
             peer.kill();
@@ -47,6 +49,7 @@ sock.onconnection = function(peer) {
       };
       backend.readStart();
       if(peer.buffers && peer.buffers.length > 0) {
+        if(backend.closed) return;
         backend.send(peer.buffers, function(status, handle, req) {
           if(status !== 0) {
             backend.kill();
@@ -78,7 +81,7 @@ sock.onconnection = function(peer) {
       peer.kill();
       return;
     }
-    //console.log("peer.onread: " + len);
+    console.log("peer.onread: " + len);
     //pprint(buf, start, len, process.stdout);
     var b = new Buffer(len);
     buf.copy(b, 0, start, start + len);
