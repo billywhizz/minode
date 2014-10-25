@@ -8,6 +8,7 @@ exports.memcached = require("./lib/memcached");
 exports.ftp = require("./lib/ftp.js");
 exports.forkit = require("./lib/forkit");
 exports.monitor = require("./lib/monitor");
+exports.Server = require("./lib/SocketServer").Server;
 try {
   exports.oracle = require("./lib/oracle");
 }
