@@ -7,6 +7,7 @@ exports.websock = require("./lib/websock");
 exports.memcached = require("./lib/memcached");
 exports.ftp = require("./lib/ftp.js");
 exports.forkit = require("./lib/forkit");
+exports.dns = require("./lib/dns");
 exports.monitor = require("./lib/monitor");
 exports.Server = require("./lib/SocketServer").Server;
 try {
