@@ -1,6 +1,6 @@
 {
   "name": "minode",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": false,
   "author": "Andrew Johnston <apjohnsto@gmail.com>",
   "repository": {
@@ -16,9 +16,6 @@
   ],
   "dependencies": {},
   "homepage": "https://github.com/billywhizz/",
-  "publishConfig": {
-    "registry": "http://git"
-  },
   "engines": {
     "node": "0.10.*",
     "npm": "1.2.25"
