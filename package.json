@@ -2,8 +2,26 @@
   "name": "minode",
   "version": "0.1.5",
   "private": false,
+  "author": "Andrew Johnston <apjohnsto@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/billywhizz/minode"
+  },
+  "keywords": [
+    "bindings",
+    "network",
+    "tcp",
+    "socket",
+    "http"
+  ],
+  "dependencies": {},
+  "homepage": "https://github.com/billywhizz/",
+  "publishConfig": {
+    "registry": "http://git"
+  },
   "engines": {
     "node": "0.10.*",
     "npm": "1.2.25"
-  }
+  },
+  "license": "MIT"
 }
