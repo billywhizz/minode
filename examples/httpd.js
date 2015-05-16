@@ -34,7 +34,7 @@ httpd.onError = function(err) {
   console.error(err);
   console.trace("httpd.onError");
 };
-rc = httpd.listen(4096);
+rc = httpd.listen(128);
 if(rc !== 0) {
   process.exit(1);
 }

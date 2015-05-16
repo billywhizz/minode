@@ -3,26 +3,27 @@ var pprint = require("../lib/utils").pprint;
 var sock = new minsock.TCP();
 var config = {
   host: "0.0.0.0",
-  port: 9000,
-  secure: false,
-  cert: "../../../cert.pem",
-  key: "../../../key.pem"
+  port: 443,
+  secure: true,
+  cert: "./cert.pem",
+  key: "./key.pem"
 };
 sock.bind(config.host, config.port);
-sock.onconnection = function(peer) {
+sock.onconnection = function(err, peer) {
+  if(err) throw(err);
   console.log("peer.onconnection");
-  function startConnection() {
-    peer.readStart();
-  }
   minsock.Create(peer);
   peer.setNoDelay(true);
-  peer.onread = function(buf, start, len) {
+  peer.onread = function(len, buf) {
     if(!buf) {
       peer.kill();
       return;
     }
     console.log("peer.onread: " + len);
-    pprint(buf, start, len, process.stdout);
+    pprint(buf, 0, len, process.stdout);
+    peer.send(buf, function(status, handle, req) {
+      console.log("peer.send:" + status);
+    });
   };
   peer.onclose = function() {
     console.log("peer.onclose");
@@ -35,10 +36,12 @@ sock.onconnection = function(peer) {
     peer.cert = require("fs").readFileSync(config.cert).toString();
     peer.key = require("fs").readFileSync(config.key).toString();
     peer.onSecure = function(err) {
-      startConnection();
+      console.log("secure");
+      peer.readStart();
     };
-    peer.setSecure();
+    peer.setSecure({server: true});
+    return;
   }
-  startConnection();
+  peer.readStart();
 }
 sock.listen(128);
